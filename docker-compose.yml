@@ -1,0 +1,13 @@
+version: "3"
+services:
+  ea:
+    image: "ros:driving_swarm"
+    build: "."
+    command: ["ros2", "launch", "demo_nodes_cpp", "talker_listener.launch.py"]
+    environment: {}
+  robot:
+    image: "ros:driving_swarm"
+    build: "."
+    command: ["ros2", "launch", "demo_nodes_cpp", "talker_listener.launch.py"]
+    deploy:
+      replicas: 6
