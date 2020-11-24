@@ -1,0 +1,10 @@
+<user-mapping>
+	<authorize username="docker" password="docker">
+		-<connection name="Driving Swarm - Docker Development Environment">
+			<protocol>vnc</protocol>
+			<param name="hostname">127.0.0.1</param>
+			<param name="port">5900</param>
+			<param name="color-depth">16</param>
+		-</connection>
+	</authorize>
+</user-mapping>
