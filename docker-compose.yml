@@ -8,7 +8,7 @@ services:
 
     # To access your development environment, go to the following URL:
     # http://127.0.0.1:1800/#/?username=docker&password=docker
-    ports: ["1800:8080"]
+    ports: ["127.0.0.1:1800:8080", "127.0.0.1:5900:5900"]
     hostname: "ros-development"
     tty: true
 

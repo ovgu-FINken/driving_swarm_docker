@@ -10,10 +10,12 @@ This repository contains all files to get started with one of the following thin
 All you need is [Docker](https://docs.docker.com/engine/install/) - then, just run the following command to start the development container with the current directory mounted as `~/workspace`:
 
 ```bash
-docker run --name ros-development -t -d -p 1800:8080 -h ros-development -v "$PWD:/home/docker/workspace" harbor.momar.xyz/driving_swarm/development
+docker run --name ros-development -t -d -p 127.0.0.1:1800:8080 -p 127.0.0.1:5900:5900 -h ros-development -v "$PWD:/home/docker/workspace" harbor.momar.xyz/driving_swarm/development
 ```
 
-You can now access your development environment at http://127.0.0.1:1800.
+You can now access your development environment at http://127.0.0.1:1800, or with any VNC client (like [Remmina](https://remmina.org/)) at `127.0.0.1:5900`.
+
+To stop the container again, run `docker stop ros-development`, to start it again, run `docker start ros-development`, and to remove it completely, stop it and then run `docker rm ros-development`.
 
 **For Windows users:** replace the `$PWD` in the command with `%cd%`.
 
