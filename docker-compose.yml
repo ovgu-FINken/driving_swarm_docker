@@ -8,7 +8,7 @@ services:
 
     # To access your development environment, go to the following URL:
     # http://127.0.0.1:1800/#/?username=docker&password=docker
-    ports: ["127.0.0.1:1800:8080", "127.0.0.1:5900:5900"]
+    ports: ["127.0.0.1:1800:8080", "127.0.0.1:1900:1900", "127.0.0.1:5900:5900"]
     hostname: "ros-development"
     tty: true
 
@@ -19,23 +19,24 @@ services:
     # TODO: Language Setup
     # TODO: Nemo Thumbnail Cache error message
 
-  #robots:
-  #  image: "harbor.momar.xyz/driving_swarm/turtlebot"
-  #  build:
-  #    context: "".""
-  #    dockerfile: "turtlebot.Dockerfile"
-  #
-  #  # TODO: Gazebo UI (Maybe with SSH-based X11 forwarding?! Something that doesn't require a DE...)
-  #  environment:
-  #    ROBOTS: 6
+  bots:
+    image: "harbor.momar.xyz/driving_swarm/turtlebot"
+    build:
+      context: "."
+      dockerfile: "turtlebot.Dockerfile"
 
-  #test:
-  #  image: "harbor.momar.xyz/driving_swarm/base"
-  #  build:
-  #    file: base.Dockerfile
-  #
-  #  # TODO: driving_swarm_infrastructure
-  #  # TODO: turtlebot3 dependencies:
-  #  # - https://github.com/ROBOTIS-GIT/turtlebot3/blob/ros2/turtlebot3.repos
-  #  # - https://emanual.robotis.com/docs/en/platform/turtlebot3/ros2_setup/#pc-setup
+    # TODO: Gazebo UI (Maybe with SSH-based X11 forwarding?! Something that doesn't require a DE...)
+    environment:
+      ROBOTS: 6
+
+  base:
+    image: "harbor.momar.xyz/driving_swarm/base"
+    build:
+      context: "."
+      dockerfile: "base.Dockerfile"
+
+    # TODO: driving_swarm_infrastructure
+    # TODO: turtlebot3 dependencies:
+    # - https://github.com/ROBOTIS-GIT/turtlebot3/blob/ros2/turtlebot3.repos
+    # - https://emanual.robotis.com/docs/en/platform/turtlebot3/ros2_setup/#pc-setup
 

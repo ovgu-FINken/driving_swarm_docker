@@ -21,6 +21,8 @@ To stop the container again, run `docker stop ros-development`, to start it agai
 
 **For Linux users:** to avoid permission issues, don't change the path `/home/docker/workspace` to anything else.
 
+To access a shell in the container, you can use `docker-compose exec dev bash`
+
 ## Build & start the container directly from the repository
 
 This is only needed when making changes to the Docker images themselves, and will take a long time.

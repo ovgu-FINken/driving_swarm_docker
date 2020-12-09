@@ -15,4 +15,4 @@ sudo -Eu tomcat guacd &
 # TODO: fix own UID if workspace exists
 usermod -u "$(stat -c '%u' ~/workspace || echo 1000)" docker
 
-exec sudo -Eu docker cinnamon-session
+exec sudo -Eu docker /ros_entrypoint.sh cinnamon-session

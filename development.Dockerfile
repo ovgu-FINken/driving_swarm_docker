@@ -1,14 +1,15 @@
-ARG ROS_VERSION=foxy
-FROM ros:$ROS_VERSION
+FROM harbor.momar.xyz/driving_swarm/turtlebot
 ARG GUAC_VERSION=1.2.0
 ARG TOMCAT_VERSION=9
+ARG NODE_VERSION=14.x
 
-WORKDIR /root
 ARG DEBIAN_FRONTEND=noninteractive
+USER root
 
 # Unminimize
 
-RUN yes | unminimize && apt-get install -y man-db
+RUN yes | unminimize &&\
+    apt-get install -y man-db
 
 # VNC Server
 
@@ -26,10 +27,6 @@ RUN apt-get install -y --no-install-recommends \
       vim-tiny nano \
       evince file-roller \
       htop fd-find silversearcher-ag less
-# fdfind the-silver-searcher
-# htop: hide user threads & alias top to htop
-# wallpaper for cinnamon
-# missing icons
 RUN rm /tmp/gnome-backgrounds.deb
 COPY development/wallpaper.jpg /usr/share/backgrounds/wallpaper.jpg
 
@@ -50,12 +47,16 @@ RUN apt-get -y install gcc g++ libcairo2-dev libjpeg-turbo8-dev libpng-dev \
     ./configure && make && make install && ldconfig &&\
     cd / && rm -rf /tmp/guacamole-server*
 
-# VS Codium
+# Theia (VS Code-like IDE)
 
-RUN wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/vscodium.gpg &&\
-    echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list &&\
-    sudo apt-get update &&\
-    sudo apt-get -y install codium
+RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add - &&\
+    DISTRO="$(lsb_release -s -c)" &&\
+    echo "deb https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list &&\
+    echo "deb-src https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list &&\
+    apt-get update
+RUN apt-get install nodejs
+COPY development/theia.package.json /opt/theia/package.json
+RUN cd /opt/theia && npm install && npm run theia build
 
 # Setup Script
 
@@ -64,15 +65,9 @@ CMD ["/setup-desktop.sh"]
 
 # Setup User
 
-RUN apt-get install -y fish
-RUN useradd -m docker -s /usr/bin/fish -G sudo &&\
-	{ echo "docker"; echo "docker"; } | passwd docker &&\
-	sed -Ei 's/^(%sudo.*\) )ALL$/\1NOPASSWD: ALL/' /etc/sudoers
 COPY development/setup-session.sh /home/docker/.config/
 COPY development/setup-session.desktop /home/docker/.config/autostart/
 COPY development/applications /home/docker/.local/share/applications
 COPY development/cinnamon-configs /home/docker/.cinnamon/configs
 COPY development/cinnamon-menus /home/docker/.config/menus
 RUN chown -R docker. /home/docker
-WORKDIR /home/docker
-ENV HOME=/home/docker
