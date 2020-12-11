@@ -3,7 +3,7 @@ set -euo pipefail
 
 mkdir -p ~/workspace/src
 cd ~/workspace
-if ! compgen -G "*.repos"; then
+if ! compgen -G "*.repos" >/dev/null; then
   echo 'repositories:' > dependencies.repos
   echo '  driving_swarm_infrastructure:' >> dependencies.repos
   echo '    type: git' >> dependencies.repos
@@ -12,6 +12,11 @@ if ! compgen -G "*.repos"; then
 fi
 if ! [ -d .git ]; then
   git init
+fi
+if ! [ -f .gitignore ]; then
+  echo 'build/' > .gitignore
+  echo 'install/' >> .gitignore
+  echo 'log/' >> .gitignore
 fi
 
 cat *.repos | vcs import src
