@@ -10,6 +10,9 @@ if ! compgen -G "*.repos"; then
   echo '    url: https://github.com/ovgu-FINken/driving_swarm_infrastructure.git' >> dependencies.repos
   echo '    version: master' >> dependencies.repos
 fi
+if ! [ -d .git ]; then
+  git init
+fi
 
 cat *.repos | vcs import src
 sudo rosdep install -i --from-path src --rosdistro foxy -y
