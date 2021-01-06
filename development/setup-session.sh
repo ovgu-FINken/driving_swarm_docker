@@ -19,6 +19,6 @@ if ! [ -f ~/.config/settings-initialized ]; then
 	touch ~/.config/settings-initialized
 fi
 
-sudo nemo --fix-cache || true
+#sudo nemo --fix-cache || true
 
 feh /usr/share/backgrounds/wallpaper.jpg --bg-scale > /tmp/feh.log

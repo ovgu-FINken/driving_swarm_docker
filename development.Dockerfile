@@ -1,34 +1,49 @@
 FROM harbor.momar.xyz/driving_swarm/turtlebot
+
+ARG DEBIAN_FRONTEND=noninteractive
 ARG GUAC_VERSION=1.2.0
 ARG TOMCAT_VERSION=9
 ARG NODE_VERSION=14.x
 
-ARG DEBIAN_FRONTEND=noninteractive
 USER root
+
 
 # Unminimize
 
 RUN yes | unminimize &&\
     apt-get install -y man-db
 
-# VNC Server
 
-RUN apt-get update &&\
-    apt-get install -y --no-install-recommends xvfb x11vnc
+# VNC Server
+# TODO maybe replace with tigervcn? (faster?)
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends  x11vnc xvfb
+
 
 # Cinnamon, without gnome-backgrounds dependency (which is a 50 MB download)
+#COPY development/gnome-backgrounds-equivs.deb /tmp/gnome-backgrounds.deb
+#RUN apt-get install -y --no-install-recommends /tmp/gnome-backgrounds.deb cinnamon adwaita-icon-theme-full feh
+#RUN rm /tmp/gnome-backgrounds.deb
+#COPY development/wallpaper.jpg /usr/share/backgrounds/wallpaper.jpg
 
-COPY development/gnome-backgrounds-equivs.deb /tmp/gnome-backgrounds.deb
-RUN apt-get install -y --no-install-recommends /tmp/gnome-backgrounds.deb cinnamon adwaita-icon-theme-full feh
+
+# xfce-desktop
+# TODO configs
+
+RUN apt-get install -y xfce4 thunar --no-install-recommends
+
+
+# desktop utilities
+
 RUN apt-get install -y --no-install-recommends \
       dbus-x11 gnome-keyring \
       tilix epiphany-browser \
-      wget curl \
-      vim-tiny nano \
+      wget \
+      vim-tiny \
       evince file-roller \
       htop fd-find silversearcher-ag less
-RUN rm /tmp/gnome-backgrounds.deb
-COPY development/wallpaper.jpg /usr/share/backgrounds/wallpaper.jpg
+
 
 # Apache Guacamole (VNC Webapp)
 
@@ -47,21 +62,23 @@ RUN apt-get -y install gcc g++ libcairo2-dev libjpeg-turbo8-dev libpng-dev \
     ./configure && make && make install && ldconfig &&\
     cd / && rm -rf /tmp/guacamole-server*
 
-# Theia (VS Code-like IDE)
 
-RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add - &&\
-    DISTRO="$(lsb_release -s -c)" &&\
-    echo "deb https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list &&\
-    echo "deb-src https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list &&\
-    apt-get update
-RUN apt-get install nodejs
-COPY development/theia.package.json /opt/theia/package.json
-RUN cd /opt/theia && npm install && npm run theia build
+# Theia (VS Code-like IDE)
+#RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add - &&\
+#    DISTRO="$(lsb_release -s -c)" &&\
+#    echo "deb https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list &&\
+#    echo "deb-src https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list &&\
+#    apt-get update
+#RUN apt-get install nodejs
+#COPY development/theia.package.json /opt/theia/package.json
+#RUN cd /opt/theia && npm install && npm run theia build
+
 
 # Setup Script
 
 COPY development/setup-desktop.sh /
 CMD ["/setup-desktop.sh"]
+
 
 # Setup User
 
@@ -70,4 +87,4 @@ COPY development/setup-session.desktop /home/docker/.config/autostart/
 COPY development/applications /home/docker/.local/share/applications
 COPY development/cinnamon-configs /home/docker/.cinnamon/configs
 COPY development/cinnamon-menus /home/docker/.config/menus
-RUN chown -R docker. /home/docker
+RUN chown -R docker /home/docker/

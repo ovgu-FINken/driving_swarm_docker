@@ -14,6 +14,15 @@ services:
 
     volumes:
     - "./workspace:/home/docker/workspace"
+    - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+
+    devices:
+    - "/dev/dri:/dev/dri"
+
+    #environment:
+    #  DISPLAY: "unix:1.0"
+
+    #privileged: true
 
     # TODO: VS Code Setup
     # TODO: Language Setup

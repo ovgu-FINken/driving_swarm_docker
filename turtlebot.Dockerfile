@@ -1,6 +1,7 @@
 FROM harbor.momar.xyz/driving_swarm/base
 
 ARG DEBIAN_FRONTEND=noninteractive
+
 USER root
 
 RUN curl -sSL http://get.gazebosim.org | sh && apt-get update &&\
@@ -10,7 +11,6 @@ RUN curl -sSL http://get.gazebosim.org | sh && apt-get update &&\
       ros-foxy-navigation2 ros-foxy-nav2-bringup \
       ros-foxy-turtlebot3-msgs ros-foxy-turtlebot3
 
-RUN echo "source ~/turtlebot3_ws/install/setup.bash" >> /etc/profile &&\
-    echo "export ROS_DOMAIN_ID=30 #TURTLEBOT3" >> /etc/profile
+RUN echo "export TURTLEBOT3_MODEL=burger" >> /etc/profile
 
 USER docker
