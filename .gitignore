@@ -1,2 +1,4 @@
 workspace/
-*.key
+deployspace/
+deploy/*.key
+deploy/*.pub

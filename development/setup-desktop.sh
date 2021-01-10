@@ -16,4 +16,3 @@ sudo -Eu tomcat guacd &
 usermod -u "$(stat -c '%u' /home/docker/workspace || echo 1000)" docker
 
 exec sudo -Eu docker /ros_entrypoint.sh vglrun startxfce4
-#exec vglrun cinnamon-session

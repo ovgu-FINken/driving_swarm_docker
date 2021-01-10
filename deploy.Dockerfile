@@ -1,5 +1,5 @@
-ARG key-file=ssh_key
-ARG run-file=basic_run.sh
+ARG key_file=deploy.key
+ARG run_file=basic_run.sh
 
 FROM harbor.momar.xyz/driving_swarm/turtlebot
 
@@ -10,13 +10,12 @@ USER root
 
 # copy ssh-key
 
-COPY deploy/${key-file} /home/docker/.ssh/ssh_key
-# no need to run ssh-agent -s?
-RUN ssh-add /home/docker/.ssh/ssh_key
+COPY deploy/${key_file} /home/docker/.ssh/deploy.key
+
 
 # basic run script
 
-COPY deploy/${run-file} /usr/local/bin/deploy.sh
+COPY deploy/${run_file} /usr/local/bin/deploy.sh
 
 
 # overwrite ENTRYPOINT with additional run-file

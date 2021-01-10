@@ -1,6 +1,6 @@
 version: "3"
 services:
-  dev:
+  development:
     image: "harbor.momar.xyz/driving_swarm/development"
     build:
       context: "."
@@ -14,7 +14,7 @@ services:
 
     volumes:
     - "./workspace:/home/docker/workspace"
-    - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+    #- "/tmp/.X11-unix:/tmp/.X11-unix:rw"
 
     devices:
     - "/dev/dri:/dev/dri"
@@ -28,7 +28,20 @@ services:
     # TODO: Language Setup
     # TODO: Nemo Thumbnail Cache error message
 
-  bots:
+  deploy:
+    image: "harbor.momar.xyz/driving_swarm/turtlebot"
+    build:
+      context: "."
+      dockerfile: "deploy.Dockerfile"
+    volumes:
+    - "./deployspace:/home/docker/workspace"
+    - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+
+    devices:
+    - "/dev/dri:/dev/dri"
+
+
+  turtlebot:
     image: "harbor.momar.xyz/driving_swarm/turtlebot"
     build:
       context: "."
