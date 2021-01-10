@@ -2,6 +2,8 @@ ARG ROS_VERSION=foxy
 
 FROM ros:$ROS_VERSION
 
+ARG VIRTUALGL_VERSION=2.6.5
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 # apts & commands (vcstool etc. in ros:foxy)
@@ -24,13 +26,12 @@ RUN useradd -m docker -s /usr/bin/bash -G sudo &&\
 
 # GPU-support for Intel (and AMD?)
 
-RUN cd /home/docker/ &&\
-    curl -L --output virtualgl.deb https://sourceforge.net/projects/virtualgl/files/2.6.5/virtualgl_2.6.5_amd64.deb && \
-    dpkg -i virtualgl.deb && \
-    rm virtualgl.deb
+RUN curl -Lo /tmp/virtualgl.deb https://sourceforge.net/projects/virtualgl/files/${VIRTUALGL_VERSION}/virtualgl_${VIRTUALGL_VERSION}_amd64.deb && \
+    apt-get install -y /tmp/virtualgl.deb && \
+    rm /tmp/virtualgl.deb
 RUN apt-get install -y \
-    libgl1-mesa-glx libgl1-mesa-dri \
-    mesa-utils
+      libgl1-mesa-glx libgl1-mesa-dri \
+      mesa-utils
 RUN usermod -a -G video docker
 
 
@@ -59,4 +60,4 @@ USER docker
 # entrypoint with cloning and building workspace
 
 ENTRYPOINT ["/ros_entrypoint.sh", "/usr/local/bin/setup-workspace.sh"]
-CMD ["bash"] 
+CMD ["bash"]
