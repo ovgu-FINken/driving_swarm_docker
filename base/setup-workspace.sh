@@ -19,10 +19,14 @@ if ! [ -f .gitignore ]; then
   echo 'log/' >> .gitignore
 fi
 
+if [ -d ~/.ssh ]; then
+  ssh-add ~/.ssh/*
+fi
+
 cat *.repos | vcs import src
 sudo rosdep install -i --from-path src --rosdistro foxy -y
 colcon build
 
 set +euo pipefail
-source install/setup.bash
+source /home/docker/.rosrc
 if [ $# -gt 0 ]; then exec "$@"; fi

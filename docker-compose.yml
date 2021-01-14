@@ -1,5 +1,22 @@
 version: "3"
 services:
+
+  development_ssh:
+    image: "harbor.momar.xyz/driving_swarm/development_ssh"
+    build:
+      context: "."
+      dockerfile: "development_ssh.Dockerfile"
+    ports: ["127.0.0.1:1800:8080", "127.0.0.1:1900:1900", "127.0.0.1:5900:5900"]
+    hostname: "ros-development-ssh"
+    volumes:
+    - "./workspace:/home/docker/workspace"
+    - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+
+    devices:
+    - "/dev/dri:/dev/dri"
+
+    #privileged: true
+
   development:
     image: "harbor.momar.xyz/driving_swarm/development"
     build:
@@ -17,25 +34,25 @@ services:
     #- "/tmp/.X11-unix:/tmp/.X11-unix:rw"
 
     devices:
-    - "/dev/dri:/dev/dri"
-
+    - "/dev/dri:/dev/dri:rw"
+    #- "/dev/dri/card0:/dev/dri/card0"
+    #- "/dev/dri/renderD128:/dev/dri/renderD128"
     #environment:
     #  DISPLAY: "unix:1.0"
 
     #privileged: true
 
-    # TODO: VS Code Setup
-    # TODO: Language Setup
+    # TODO: conditional jupylab / theia setup
     # TODO: Nemo Thumbnail Cache error message
 
   deploy:
-    image: "harbor.momar.xyz/driving_swarm/turtlebot"
+    image: "harbor.momar.xyz/driving_swarm/deploy"
     build:
       context: "."
       dockerfile: "deploy.Dockerfile"
     volumes:
     - "./deployspace:/home/docker/workspace"
-    - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+    #- "/tmp/.X11-unix:/tmp/.X11-unix:rw"
 
     devices:
     - "/dev/dri:/dev/dri"
@@ -50,6 +67,12 @@ services:
     # TODO: Gazebo UI (Maybe with SSH-based X11 forwarding?! Something that doesn't require a DE...)
     environment:
       ROBOTS: 6
+
+  turtleslim:
+    image: "harbor.momar.xyz/driving_swarm/turtleslim"
+    build:
+      context: "."
+      dockerfile: "turtleslim.Dockerfile"
 
   base:
     image: "harbor.momar.xyz/driving_swarm/base"

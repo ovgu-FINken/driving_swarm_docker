@@ -4,8 +4,7 @@ printf "1\nn\nn\nn\nx" | vglserver_config
 rm -f /tmp/.X1-lock
 #rm -f /tmp/.X11-unix/X0
 export DISPLAY=":0"
-# TODO better / use vgl_entrypoint
-export VGL_DISPLAY="/dev/dri/card0"
+export VGL_DISPLAY="$DISPLAY"
 sudo -Eu docker vglrun Xvfb $DISPLAY -screen 0 1920x1080x16 &
 #vglrun Xvfb $DISPLAY -screen 0 1920x1080x16 &
 sudo -Eu docker /usr/bin/x11vnc -ncache 0 -display $DISPLAY -shared -forever &

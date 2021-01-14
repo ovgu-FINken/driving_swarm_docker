@@ -14,16 +14,11 @@ RUN yes | unminimize &&\
     apt-get install -y man-db
 
 
-# Dev-Packages
-RUN apt-get update &&\
-    apt-get install -y --no-install-recommends\
-    gcc g++
-
-
 # VNC Server
+# TODO maybe replace with tigervcn? (faster?)
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends  x11vnc xvfb x11-xserver-utils
+    apt-get install -y --no-install-recommends  x11vnc xvfb
 
 
 # Cinnamon, without gnome-backgrounds dependency (which is a 50 MB download)
@@ -36,8 +31,7 @@ RUN apt-get update && \
 # xfce-desktop
 # TODO configs
 
-RUN apt-get install -y --no-install-recommends \
-    xfce4 thunar ristretto mousepad mpv
+RUN apt-get install -y xfce4 thunar --no-install-recommends
 
 
 # desktop utilities
@@ -46,12 +40,11 @@ RUN apt-get install -y --no-install-recommends \
       dbus-x11 gnome-keyring \
       tilix epiphany-browser \
       wget \
-      vim-tiny feh \
+      vim-tiny \
       evince file-roller \
       htop fd-find silversearcher-ag less
 
 
-#TODO replace with novnc + websockify
 # Apache Guacamole (VNC Webapp)
 
 # client:
@@ -61,7 +54,7 @@ COPY --chown=tomcat development/guacamole-user-mapping.xml /etc/guacamole/user-m
 COPY --chown=tomcat development/guacamole-index.html /var/lib/tomcat$TOMCAT_VERSION/webapps/ROOT/index.html
 # guacd:
 ADD --chown=tomcat https://downloads.apache.org/guacamole/$GUAC_VERSION/source/guacamole-server-$GUAC_VERSION.tar.gz /tmp/guacamole-server.tar.gz
-RUN apt-get -y --no-install-recommends install libcairo2-dev libjpeg-turbo8-dev libpng-dev \
+RUN apt-get -y install gcc g++ libcairo2-dev libjpeg-turbo8-dev libpng-dev \
       libtool-bin libossp-uuid-dev libavcodec-dev libavutil-dev libswscale-dev \
       freerdp2-dev libpango1.0-dev libssh2-1-dev libvncserver-dev libtelnet-dev \
       libssl-dev libvorbis-dev libwebp-dev &&\
@@ -83,11 +76,8 @@ RUN apt-get -y --no-install-recommends install libcairo2-dev libjpeg-turbo8-dev 
 
 # Setup Script
 
-COPY development/setup-desktop.sh /usr/local/bin/setup-desktop.sh
-# This is better (user can build, starts if not able to build etc.)
-#ENTRYPOINT ["/usr/local/bin/setup-desktop.sh"]
-ENTRYPOINT ["/usr/local/bin/setup-desktop.sh"]
-#CMD ["/usr/local/bin/setup-desktop.sh"]
+COPY development/setup-desktop.sh /
+CMD ["/setup-desktop.sh"]
 
 
 # Setup User
@@ -95,6 +85,6 @@ ENTRYPOINT ["/usr/local/bin/setup-desktop.sh"]
 COPY development/setup-session.sh /home/docker/.config/
 COPY development/setup-session.desktop /home/docker/.config/autostart/
 COPY development/applications /home/docker/.local/share/applications
-#COPY development/cinnamon-configs /home/docker/.cinnamon/configs
-#COPY development/cinnamon-menus /home/docker/.config/menus
+COPY development/cinnamon-configs /home/docker/.cinnamon/configs
+COPY development/cinnamon-menus /home/docker/.config/menus
 RUN chown -R docker /home/docker/

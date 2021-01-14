@@ -1,4 +1,8 @@
-workspace/
 deployspace/
-deploy/*.key
-deploy/*.pub
+deploy/ssh/id_rsa
+deploy/ssh/*.key
+deploy/ssh/*.pub
+workspace/
+development/ssh/id_rsa
+development/ssh/*.key
+development/ssh/*.pub
