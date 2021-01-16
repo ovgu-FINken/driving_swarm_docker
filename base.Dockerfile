@@ -6,12 +6,19 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG VIRTUALGL_VERSION=2.6.80
 
 
-# apts & commands (vcstool etc. in ros:foxy)
+# apt upgrade + additional base-packages,
+# buildtools, introspection tools
 
-RUN apt-get update && apt-get -y upgrade
-RUN apt-get -y install \
+RUN apt-get update && apt-get -y upgrade &&\
+    apt-get -y --no-recommends install \
+      python3-pykdl
+RUN apt-get -y install
+      gcc g++ \
       python3-pip \
-      curl nano openssh-client
+      curl openssh-client \
+      nano less &&\
+    ln -s /usr/bin/python3 /usr/bin/python &&\
+    ln -s /usr/bin/pip3 /usr/bin/pip
 
 
 # add docker user
@@ -28,15 +35,15 @@ RUN echo "deb http://ppa.launchpad.net/kisak/kisak-mesa/ubuntu $(lsb_release -cs
     echo "deb-src http://ppa.launchpad.net/kisak/kisak-mesa/ubuntu $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list &&\
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB8B81E14DA65431D7504EA8F63F0F2B90935439 &&\
 	apt-get update &&\
-    apt-get install -y \
-    libgl1-mesa-glx libgl1-mesa-dri \
-    mesa-utils \
-    libvulkan1 vulkan-utils
+    apt-get install -y --no-recommends \
+      libgl1-mesa-glx libgl1-mesa-dri \
+      mesa-utils \
+      libvulkan1 vulkan-utils
 
 RUN usermod -a -G video docker
 
 # For virtualgl
-RUN curl -Lo /tmp/virtualgl.deb https://s3.amazonaws.com/virtualgl-pr/dev/linux/virtualgl_${VIRTUALGL_VERSION}_amd64.deb &&\
+RUN curl -fsSLo /tmp/virtualgl.deb https://s3.amazonaws.com/virtualgl-pr/dev/linux/virtualgl_${VIRTUALGL_VERSION}_amd64.deb &&\
     apt-get install -y /tmp/virtualgl.deb &&\
     rm /tmp/virtualgl.deb &&\
     chmod u+s /usr/lib/libvglfaker.so &&\

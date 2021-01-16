@@ -1,3 +1,4 @@
+build-*
 deployspace/
 deploy/ssh/id_rsa
 deploy/ssh/*.key

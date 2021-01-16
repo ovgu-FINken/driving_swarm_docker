@@ -1,29 +1,42 @@
 FROM harbor.momar.xyz/driving_swarm/turtlebot
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG GUAC_VERSION=1.2.0
-ARG TOMCAT_VERSION=9
-ARG NODE_VERSION=14.x
+ARG NOVNC_VERSION=1.1.0
+ARG WEBSOCKIFY_VERSION=0.8.0
 
 USER root
-
 
 # Unminimize
 
 RUN yes | unminimize &&\
+    apt-get update &&\
     apt-get install -y man-db
 
 
 # Dev-Packages
-RUN apt-get update &&\
-    apt-get install -y --no-install-recommends\
-    gcc g++
+
+#RUN apt-get update &&\
+#    apt-get install -y --no-install-recommends\
 
 
 # VNC Server
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends  x11vnc xvfb x11-xserver-utils
+RUN apt-get install -y --no-install-recommends \
+      x11vnc xvfb x11-xserver-utils \
+	  #novnc websockify
+      # TODO work with nginx (theia!)
+
+# novnc + websockify
+
+COPY development/nginx.conf /etc/nginx/conf.d/novnc.conf
+RUN curl -fsSL https://github.com/novnc/noVNC/archive/v${NOVNC_VERSION}.tar.gz | tar -xzf - -C /opt &&\
+    curl -fsSL https://github.com/novnc/websockify/archive/v${WEBSOCKIFY_VERSION}.tar.gz | tar -xzf - -C /opt && \
+    mv /opt/noVNC-${NOVNC_VERSION} /opt/noVNC &&\
+    mkdir -p /srv/novnc &&\
+    mv /opt/websockify-${WEBSOCKIFY_VERSION} /opt/websockify &&\
+	ln -s /opt/noVNC/vnc.html /opt/noVNC/index.html &&\
+    ln -s /opt/noVNC /srv/novnc &&\
+    cd /opt/websockify && make
 
 
 # Cinnamon, without gnome-backgrounds dependency (which is a 50 MB download)
@@ -37,38 +50,22 @@ RUN apt-get update && \
 # TODO configs
 
 RUN apt-get install -y --no-install-recommends \
-    xfce4 thunar ristretto mousepad mpv
+      xfce4 thunar ristretto mousepad mpv \
+      xfce4-screenshooter \
+      # TODO add config
+      xfce4-whiskermenu-plugin xfce4-cpugraph-plugin \
+      pop-icon-theme
 
 
-# desktop utilities
+# utilities
 
 RUN apt-get install -y --no-install-recommends \
       dbus-x11 gnome-keyring \
       tilix epiphany-browser \
-      wget \
+      wget psmisc \
       vim-tiny feh \
       evince file-roller \
-      htop fd-find silversearcher-ag less
-
-
-#TODO replace with novnc + websockify
-# Apache Guacamole (VNC Webapp)
-
-# client:
-RUN apt-get install -y tomcat$TOMCAT_VERSION
-ADD --chown=tomcat http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/$GUAC_VERSION/binary/guacamole-$GUAC_VERSION.war /var/lib/tomcat$TOMCAT_VERSION/webapps/guacamole.war
-COPY --chown=tomcat development/guacamole-user-mapping.xml /etc/guacamole/user-mapping.xml
-COPY --chown=tomcat development/guacamole-index.html /var/lib/tomcat$TOMCAT_VERSION/webapps/ROOT/index.html
-# guacd:
-ADD --chown=tomcat https://downloads.apache.org/guacamole/$GUAC_VERSION/source/guacamole-server-$GUAC_VERSION.tar.gz /tmp/guacamole-server.tar.gz
-RUN apt-get -y --no-install-recommends install libcairo2-dev libjpeg-turbo8-dev libpng-dev \
-      libtool-bin libossp-uuid-dev libavcodec-dev libavutil-dev libswscale-dev \
-      freerdp2-dev libpango1.0-dev libssh2-1-dev libvncserver-dev libtelnet-dev \
-      libssl-dev libvorbis-dev libwebp-dev &&\
-    cd /tmp && tar xvf guacamole-server.tar.gz && cd guacamole-server-* &&\
-    ./configure && make && make install && ldconfig &&\
-    cd / && rm -rf /tmp/guacamole-server*
-
+      htop fd-find silversearcher-ag
 
 # Theia (VS Code-like IDE)
 #RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add - &&\
@@ -85,9 +82,8 @@ RUN apt-get -y --no-install-recommends install libcairo2-dev libjpeg-turbo8-dev 
 
 COPY development/setup-desktop.sh /usr/local/bin/setup-desktop.sh
 # This is better (user can build, starts if not able to build etc.)
-#ENTRYPOINT ["/usr/local/bin/setup-desktop.sh"]
-ENTRYPOINT ["/usr/local/bin/setup-desktop.sh"]
-#CMD ["/usr/local/bin/setup-desktop.sh"]
+ENTRYPOINT []
+CMD ["/vgl_entrypoint.sh", "/usr/local/bin/setup-desktop.sh"]
 
 
 # Setup User
@@ -95,6 +91,8 @@ ENTRYPOINT ["/usr/local/bin/setup-desktop.sh"]
 COPY development/setup-session.sh /home/docker/.config/
 COPY development/setup-session.desktop /home/docker/.config/autostart/
 COPY development/applications /home/docker/.local/share/applications
-#COPY development/cinnamon-configs /home/docker/.cinnamon/configs
-#COPY development/cinnamon-menus /home/docker/.config/menus
+
+# TODO xfce4-configs
+# COPY ...
+
 RUN chown -R docker /home/docker/
