@@ -1,55 +1,21 @@
 version: "3"
 services:
 
-  development_ssh:
-    image: "harbor.momar.xyz/driving_swarm/development_ssh"
-    build:
-      context: "."
-      dockerfile: "development_ssh.Dockerfile"
-    ports: ["127.0.0.1:1800:8080", "127.0.0.1:1900:1900", "127.0.0.1:5900:5900"]
-    hostname: "ros-development-ssh"
-    volumes:
-    - "./workspace:/home/docker/workspace"
-
-    devices:
-    - "/dev/dri:/dev/dri"
-
   development:
-    image: "harbor.momar.xyz/driving_swarm/development"
+    image: "ovgudrivingswarm/development:latest"
     build:
       context: "."
       dockerfile: "development.Dockerfile"
-
-    # To access your development environment, go to the following URL:
-    # http://127.0.0.1:1800/
-    ports: ["127.0.0.1:1800:8080", "127.0.0.1:1900:1900", "127.0.0.1:5900:5900"]
+    ports: ["127.0.0.1:1800:1800", "127.0.0.1:1900:1900", "127.0.0.1:5900:5900"]
     hostname: "ros-development"
-    tty: true
-
     volumes:
     - "./workspace:/home/docker/workspace"
-
+    - "./ssh:/home/docker/.ssh"
     devices:
     - "/dev/dri:/dev/dri:rw"
 
-    # TODO: conditional jupylab / theia setup
-    # TODO: Nemo Thumbnail Cache error message
-
-  deploy:
-    image: "harbor.momar.xyz/driving_swarm/deploy"
-    build:
-      context: "."
-      dockerfile: "deploy.Dockerfile"
-    volumes:
-    - "./deployspace:/home/docker/workspace"
-    #- "/tmp/.X11-unix:/tmp/.X11-unix:rw"
-
-    devices:
-    - "/dev/dri:/dev/dri"
-
-
   turtlebot:
-    image: "harbor.momar.xyz/driving_swarm/turtlebot"
+    image: "ovgudrivingswarm/turtlebot:latest"
     build:
       context: "."
       dockerfile: "turtlebot.Dockerfile"
@@ -57,18 +23,34 @@ services:
     # TODO: Gazebo UI (Maybe with SSH-based X11 forwarding?! Something that doesn't require a DE...)
     environment:
       ROBOTS: 6
+    devices:
+    - "/dev/dri:/dev/dri"
 
   turtleslim:
-    image: "harbor.momar.xyz/driving_swarm/turtleslim"
+    image: "ovgudrivingswarm/turtlebot:slim"
     build:
       context: "."
       dockerfile: "turtleslim.Dockerfile"
+    devices:
+    - "/dev/dri:/dev/dri"
+
+  deploy:
+    image: "ovgudrivingswarm/base:deploy"
+    build:
+      context: "."
+      dockerfile: "deploy.Dockerfile"
+    volumes:
+    - "./deployspace:/home/docker/workspace"
+    devices:
+    - "/dev/dri:/dev/dri"
 
   base:
-    image: "harbor.momar.xyz/driving_swarm/base"
+    image: "ovgudrivingswarm/base:latest"
     build:
       context: "."
       dockerfile: "base.Dockerfile"
+    devices:
+    - "/dev/dri:/dev/dri"
 
     # TODO: driving_swarm_infrastructure
     # TODO: turtlebot3 dependencies:

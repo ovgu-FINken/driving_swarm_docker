@@ -1,4 +1,4 @@
-FROM harbor.momar.xyz/driving_swarm/base
+FROM ovgudrivingswarm/base:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 

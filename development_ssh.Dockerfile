@@ -1,4 +1,4 @@
-FROM harbor.momar.xyz/driving_swarm/development
+FROM ovgudrivingswarm/development:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG DIR_SSH=ssh

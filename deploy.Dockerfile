@@ -1,4 +1,4 @@
-FROM harbor.momar.xyz/driving_swarm/turtlebot
+FROM ovgudrivingswarm/turtlebot:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG DIR_SSH=ssh

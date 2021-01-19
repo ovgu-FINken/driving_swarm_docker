@@ -7,10 +7,9 @@ export DISPLAY=":0"
 # use websockify instead?
 sudo -Eu docker vglrun Xvfb $DISPLAY -screen 0 1920x1080x16 &
 sudo -Eu docker x11vnc -nopw -rfbport 5900 -ncache 0 -display $DISPLAY -shared -forever &
+/opt/websockify/run --web="/srv/novnc/" 1800 localhost:5900 &
 
-#TODO start novnc and websockify
-/opt/websockify/run --web="/srv/novnc/" 8080 localhost:5900 &
-#nginx &
+# start Theia
 exec sudo -Eu docker sh -c "cd /opt/theia && exec yarn start /home/docker/workspace" &
 
 # TODO: fix own UID if workspace exists

@@ -1,4 +1,4 @@
-FROM harbor.momar.xyz/driving_swarm/base
+FROM ovgudrivingswarm/base:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG GAZEBO_VERSION=11
@@ -6,7 +6,6 @@ ARG GAZEBO_VERSION=11
 USER root
 
 
-#RUN curl -sSL http://get.gazebosim.org | sh && apt-get update &&\
 RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" > /etc/apt/sources.list.d/gazebo-stable.list &&\
     curl https://packages.osrfoundation.org/gazebo.key | apt-key add - &&\
     apt-get update && apt-get install -y --no-install-recommends \
