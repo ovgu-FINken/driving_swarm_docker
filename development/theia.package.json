@@ -18,15 +18,16 @@
     "@theia/preferences": "next",
     "@theia/search-in-workspace": "next",
     "@theia/terminal": "next",
-    "@theia/vsx-registry": "next",
+    "@theia/vsx-registry": "next"
   },
   "devDependencies": {
-    "@theia/cli": "next"
+    "@theia/cli": "next",
+    "webpack": "~4.46.0"
   },
   "scripts": {
     "prepare": "yarn run clean && yarn build && yarn run download:plugins",
     "clean": "theia clean",
-    "build": "theia build --mode development",
+    "build": "theia build --mode production",
     "start": "theia start --plugins=local-dir:plugins --hostname 0.0.0.0 --port 1900",
     "download:plugins": "theia download:plugins"
   },
@@ -62,5 +63,8 @@
     "vscode-python": "https://github.com/microsoft/vscode-python/releases/download/2020.9.112786/ms-python-release.vsix",
     "vscode-xml": "https://github.com/redhat-developer/vscode-xml/releases/download/0.12.0/redhat.vscode-xml-0.12.0.vsix",
     "vscode-cmake": "https://github.com/twxs/vs.language.cmake/releases/download/v0.0.16-beta1/cmake-0.0.16.vsix"
+  },
+  "disabledTheiaPlugins": {
+    "vscode-browser-preview": "https://open-vsx.org/api/auchenberg/vscode-browser-preview/0.6.7/file/auchenberg.vscode-browser-preview-0.6.7.vsix"
   }
 }

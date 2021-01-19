@@ -11,6 +11,7 @@ sudo -Eu docker x11vnc -nopw -rfbport 5900 -ncache 0 -display $DISPLAY -shared -
 #TODO start novnc and websockify
 /opt/websockify/run --web="/srv/novnc/" 8080 localhost:5900 &
 #nginx &
+exec sudo -Eu docker sh -c "cd /opt/theia && exec yarn start /home/docker/workspace" &
 
 # TODO: fix own UID if workspace exists
 usermod -u "$(stat -c '%u' /home/docker/workspace || echo 1000)" docker

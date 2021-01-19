@@ -1,6 +1,7 @@
 FROM harbor.momar.xyz/driving_swarm/turtlebot
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG NODE_VERSION=12.x
 ARG NOVNC_VERSION=1.1.0
 ARG WEBSOCKIFY_VERSION=0.8.0
 
@@ -22,7 +23,7 @@ RUN yes | unminimize &&\
 # VNC Server
 
 RUN apt-get install -y --no-install-recommends \
-      x11vnc xvfb x11-xserver-utils \
+      x11vnc xvfb x11-xserver-utils
 	  #novnc websockify
       # TODO work with nginx (theia!)
 
@@ -67,15 +68,17 @@ RUN apt-get install -y --no-install-recommends \
       evince file-roller \
       htop fd-find silversearcher-ag
 
-# Theia (VS Code-like IDE)
-#RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add - &&\
-#    DISTRO="$(lsb_release -s -c)" &&\
-#    echo "deb https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list &&\
-#    echo "deb-src https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list &&\
-#    apt-get update
-#RUN apt-get install nodejs
-#COPY development/theia.package.json /opt/theia/package.json
-#RUN cd /opt/theia && npm install && npm run theia build
+# Theia IDE
+RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add - &&\
+    DISTRO="$(lsb_release -s -c)" &&\
+    echo "deb https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list &&\
+    echo "deb-src https://deb.nodesource.com/node_$NODE_VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list &&\
+    apt-get update
+RUN apt-get install nodejs && npm install -g yarn
+COPY development/theia.package.json /opt/theia/package.json
+RUN cd /opt/theia && yarn
+RUN cd /opt/theia && yarn theia build
+RUN apt-get install -y openjdk-14-jre # Required for XML files etc.
 
 
 # Setup Script

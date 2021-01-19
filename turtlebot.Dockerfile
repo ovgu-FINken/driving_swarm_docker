@@ -20,6 +20,6 @@ RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_relea
 
 
 RUN echo "export TURTLEBOT3_MODEL=burger" >> /home/docker/.rosrc &&\
-    echo "export GAZEBO_MODEL_PATH="$GAZEBO_MODEL_PATH:/home/docker/workspace/src/turtlebot3_simulations/turtlebot3_gazebo/models" >> /home/docker/.rosrc
+    echo 'export GAZEBO_MODEL_PATH="$GAZEBO_MODEL_PATH:/home/docker/workspace/src/turtlebot3_simulations/turtlebot3_gazebo/models' >> /home/docker/.rosrc
 
 USER docker

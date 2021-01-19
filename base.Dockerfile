@@ -10,9 +10,9 @@ ARG VIRTUALGL_VERSION=2.6.80
 # buildtools, introspection tools
 
 RUN apt-get update && apt-get -y upgrade &&\
-    apt-get -y --no-recommends install \
+    apt-get -y --no-install-recommends install \
       python3-pykdl
-RUN apt-get -y install
+RUN apt-get -y install \
       gcc g++ \
       python3-pip \
       curl openssh-client \
@@ -35,7 +35,7 @@ RUN echo "deb http://ppa.launchpad.net/kisak/kisak-mesa/ubuntu $(lsb_release -cs
     echo "deb-src http://ppa.launchpad.net/kisak/kisak-mesa/ubuntu $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list &&\
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB8B81E14DA65431D7504EA8F63F0F2B90935439 &&\
 	apt-get update &&\
-    apt-get install -y --no-recommends \
+    apt-get install -y --no-install-recommends \
       libgl1-mesa-glx libgl1-mesa-dri \
       mesa-utils \
       libvulkan1 vulkan-utils
