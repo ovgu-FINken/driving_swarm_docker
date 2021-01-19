@@ -11,7 +11,8 @@ All you need is [Docker](https://docs.docker.com/engine/install/) - then, just r
 
 ```bash
 docker run --name ros-development -d -h ros-development \
-  -p 127.0.0.1:1800:8080 \
+  --device=/dev/dri \
+  -p 127.0.0.1:1800:1800 \
   -p 127.0.0.1:1900:1900 \
   -p 127.0.0.1:5900:5900 \
   -v "$PWD:/home/docker/workspace" \

@@ -12,7 +12,7 @@ services:
     - "./workspace:/home/docker/workspace"
     - "./ssh:/home/docker/.ssh"
     devices:
-    - "/dev/dri:/dev/dri:rw"
+    - "/dev/dri:/dev/dri"
 
   turtlebot:
     image: "ovgudrivingswarm/turtlebot:latest"
