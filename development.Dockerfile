@@ -29,7 +29,6 @@ RUN apt-get install -y --no-install-recommends \
 
 # novnc + websockify
 
-COPY development/nginx.conf /etc/nginx/conf.d/novnc.conf
 RUN curl -fsSL https://github.com/novnc/noVNC/archive/v${NOVNC_VERSION}.tar.gz | tar -xzf - -C /opt &&\
     curl -fsSL https://github.com/novnc/websockify/archive/v${WEBSOCKIFY_VERSION}.tar.gz | tar -xzf - -C /opt && \
     mv /opt/noVNC-${NOVNC_VERSION} /opt/noVNC &&\
@@ -91,9 +90,6 @@ CMD ["/vgl_entrypoint.sh", "/usr/local/bin/setup-desktop.sh"]
 
 # Setup User
 
-COPY development/setup-session.sh /home/docker/.config/
-COPY development/setup-session.desktop /home/docker/.config/autostart/
-COPY development/applications /home/docker/.local/share/applications
 
 # TODO xfce4-configs
 # COPY ...

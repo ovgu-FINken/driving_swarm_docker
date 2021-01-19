@@ -1,4 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Setup Session
-Exec=/home/docker/.config/setup-session.sh
