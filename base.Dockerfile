@@ -40,7 +40,13 @@ RUN echo "deb http://ppa.launchpad.net/kisak/kisak-mesa/ubuntu $(lsb_release -cs
       mesa-utils \
       libvulkan1 vulkan-utils
 
-RUN usermod -a -G video docker
+# video is required everywhere, render exists on Elementary OS and probably a few others
+RUN groupadd -r -g 109 render && usermod -a -G render docker && usermod -a -G video docker
+
+# Make NVIDIA work!
+COPY base/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES graphics,utility,compute
 
 # For virtualgl
 RUN curl -fsSLo /tmp/virtualgl.deb https://s3.amazonaws.com/virtualgl-pr/dev/linux/virtualgl_${VIRTUALGL_VERSION}_amd64.deb &&\
@@ -48,7 +54,7 @@ RUN curl -fsSLo /tmp/virtualgl.deb https://s3.amazonaws.com/virtualgl-pr/dev/lin
     rm /tmp/virtualgl.deb &&\
     chmod u+s /usr/lib/libvglfaker.so &&\
     chmod u+s /usr/lib/libdlfaker.so &&\
-    printf "3\nn\nx\n" | vglserver_config 
+    printf "3\nn\nx\n" | vglserver_config
 
 # Add to .rosrc (ENTRYPOINT has no sourced files)
 
@@ -63,7 +69,7 @@ ADD --chown=docker https://gist.githubusercontent.com/moqmar/28dde796bb924dd6bfb
 
 RUN echo "\n###############\n## ROS stuff ##\n###############" >> /home/docker/.bashrc &&\
     echo "\ncd ~/workspace && source install/setup.bash" >> /home/docker/.bashrc &&\
-    echo "echo 'Tip: use setup-workspace.sh to quickly install dependencies & build your workspace'" >> /home/docker/.bashrc 
+    echo "echo 'Tip: use setup-workspace.sh to quickly install dependencies & build your workspace'" >> /home/docker/.bashrc
 
 
 # scripts

@@ -29,6 +29,16 @@ To stop the container again, run `docker stop ros-development`, to start it agai
 
 To access a shell in the container, you can use `docker-compose exec dev bash`
 
+## Hardware Acceleration
+
+For NVIDIA GPUs you need [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker), and on Windows additionally
+[CUDA on WSL](https://developer.nvidia.com/cuda/wsl), as well as the [WSL 2 backend](https://docs.docker.com/docker-for-windows/wsl/) for Docker.  
+Then, instead of `docker run` inf the launch command above, use `nvidia-docker run --gpus all`.
+
+On Intel and AMD, everything should work out of the box.
+
+If you want to disable GPU acceleration, pass `-e DISABLE_GPU=1` to your start command.
+
 ## Build & start the container directly from the repository
 
 This is only needed when making changes to the Docker images themselves, and will take a long time.
