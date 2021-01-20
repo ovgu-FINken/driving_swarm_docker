@@ -77,8 +77,9 @@ RUN apt-get install nodejs && npm install -g yarn
 COPY development/theia.package.json /opt/theia/package.json
 RUN cd /opt/theia && yarn
 RUN cd /opt/theia && yarn theia build
-RUN apt-get install -y openjdk-14-jre # Required for XML files etc.
-
+RUN apt-get install -y openjdk-14-jre pylint # Required for XML files, Python etc.
+ENV THEIA_WEBVIEW_EXTERNAL_ENDPOINT={{hostname}} # Required for Chrome
+VOLUME /home/docker/.theia
 
 # Setup Script
 

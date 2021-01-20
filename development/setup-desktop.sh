@@ -14,10 +14,14 @@ sudo -Eu docker env VGL_DISPLAY=egl $vglrun Xvfb $DISPLAY -screen 0 1920x1080x16
 # start NoVNC
 /opt/websockify/run --web="/srv/novnc/" 1800 localhost:5900 &
 
-# start Theia
-exec sudo -Eu docker sh -c "cd /opt/theia && exec yarn start /home/docker/workspace" &
-
-# TODO: fix own UID if workspace exists
+# fix own UID if workspace exists
+# this is only included with the development image as it's the only image intended to be ran with a mounted workspace
 usermod -u "$(stat -c '%u' /home/docker/workspace || echo 1000)" docker
+chown -R docker /home/docker 
+chown -R docker /opt/theia/plugins/vscode-cpp # https://github.com/microsoft/vscode-cpptools/issues/4643
+
+# start Theia
+{ cd /opt/theia; sudo -Eu docker yarn start /home/docker/workspace; } &
+
 
 exec sudo -Eu docker env VGL_DISPLAY=egl DISPLAY=$DISPLAY $vglrun startxfce4
