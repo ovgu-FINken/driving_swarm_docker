@@ -65,12 +65,11 @@ RUN echo "#!/usr/bin/env bash\n# ROS-Specific initialisation of env-variables et
 
 # .bashrc
 
-ADD --chown=docker https://gist.githubusercontent.com/moqmar/28dde796bb924dd6bfb1eafbe0d265e8/raw/f24336f8f2cf7281a095d2b81e50bd2ec4464b22/.bashrc /home/docker/.bashrc
+ADD --chown=docker https://gist.githubusercontent.com/moqmar/28dde796bb924dd6bfb1eafbe0d265e8/raw/0875a60c093f6ffbaaadf1feb31d0731023e017b/.bashrc /home/docker/.bashrc
 
-RUN echo "\n###############\n## ROS stuff ##\n###############" >> /home/docker/.bashrc &&\
-    echo "\ncd ~/workspace && source install/setup.bash" >> /home/docker/.bashrc &&\
+RUN echo "\ncd ~/workspace && source ~/.rosrc" >> /home/docker/.bashrc &&\
+    echo 'if [ -d ~/.ssh ] && [ -n "$(ls ~/.ssh)" ]; then ssh-add ~/.ssh/*; fi' >> /home/docker/.bashrc &&\
     echo "echo 'Tip: use setup-workspace.sh to quickly install dependencies & build your workspace'" >> /home/docker/.bashrc
-
 
 # scripts
 

@@ -16,7 +16,7 @@ docker run --name ros-development -d -h ros-development \
   -p 127.0.0.1:1900:1900 \
   -p 127.0.0.1:5900:5900 \
   -v "$PWD:/home/docker/workspace" \
-  -v "$HOME/.ssh:/home/docker/.ssh" \
+  -v "$PWD/.ssh:/home/docker/.ssh" \
   ovgudrivingswarm/development
 ```
 
