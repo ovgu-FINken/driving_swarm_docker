@@ -12,7 +12,7 @@ build-turtlebot: build-base turtlebot.Dockerfile
 	docker-compose build ${OPTIONS} turtlebot
 	@ touch $@
 
-build-turtlebot-slim: build-base turtleslim.Dockerfile
+build-turtlebot-slim: build-base turtlebot-slim.Dockerfile
 	docker-compose build ${OPTIONS} turtlebot-slim
 	@ touch $@
 

@@ -9,7 +9,7 @@ USER root
 
 # copy ssh-key & own it with chown
 
-COPY deploy/"$DIR_SSH"/* /home/docker/.ssh/
+COPY ./"$DIR_SSH"/* /home/docker/.ssh/
 RUN chown -R docker /home/docker
 
 # basic run script

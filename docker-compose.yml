@@ -19,10 +19,6 @@ services:
     build:
       context: "."
       dockerfile: "turtlebot.Dockerfile"
-
-    # TODO: Gazebo UI (Maybe with SSH-based X11 forwarding?! Something that doesn't require a DE...)
-    environment:
-      ROBOTS: 6
     devices:
     - "/dev/dri:/dev/dri"
 
@@ -30,7 +26,7 @@ services:
     image: "ovgudrivingswarm/turtlebot:slim"
     build:
       context: "."
-      dockerfile: "turtleslim.Dockerfile"
+      dockerfile: "turtlebot-slim.Dockerfile"
     devices:
     - "/dev/dri:/dev/dri"
 
@@ -51,9 +47,4 @@ services:
       dockerfile: "base.Dockerfile"
     devices:
     - "/dev/dri:/dev/dri"
-
-    # TODO: driving_swarm_infrastructure
-    # TODO: turtlebot3 dependencies:
-    # - https://github.com/ROBOTIS-GIT/turtlebot3/blob/ros2/turtlebot3.repos
-    # - https://emanual.robotis.com/docs/en/platform/turtlebot3/ros2_setup/#pc-setup
 
