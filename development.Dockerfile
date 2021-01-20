@@ -69,9 +69,7 @@ VOLUME /home/docker/.theia
 # Setup Script
 
 COPY development/setup-desktop.sh /usr/local/bin/setup-desktop.sh
-# This is better (user can build, starts if not able to build etc.)
-ENTRYPOINT []
-CMD ["/vgl_entrypoint.sh", "/usr/local/bin/setup-desktop.sh"]
+CMD ["/usr/local/bin/setup-desktop.sh"]
 
 
 # Setup User
