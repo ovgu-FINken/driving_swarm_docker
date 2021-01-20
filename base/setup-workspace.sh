@@ -17,9 +17,8 @@ if ! [ -f .gitignore ]; then
   echo 'build/' > .gitignore
   echo 'install/' >> .gitignore
   echo 'log/' >> .gitignore
+  echo '.ssh/' >> .gitignore
 fi
-
-if [ -d ~/.ssh ] && [ -n "$(ls ~/.ssh)" ]; then ssh-add ~/.ssh/*; fi
 
 cat *.repos | vcs import src
 sudo rosdep install -i --from-path src --rosdistro foxy -y

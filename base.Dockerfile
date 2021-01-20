@@ -68,23 +68,24 @@ RUN echo "#!/usr/bin/env bash\n# ROS-Specific initialisation of env-variables et
 ADD --chown=docker https://gist.githubusercontent.com/moqmar/28dde796bb924dd6bfb1eafbe0d265e8/raw/0875a60c093f6ffbaaadf1feb31d0731023e017b/.bashrc /home/docker/.bashrc
 
 RUN echo "\ncd ~/workspace && source ~/.rosrc" >> /home/docker/.bashrc &&\
-    echo 'if [ -d ~/.ssh ] && [ -n "$(ls ~/.ssh)" ]; then ssh-add ~/.ssh/*; fi' >> /home/docker/.bashrc &&\
+    echo 'if [ -d ~/workspace/.ssh ] && [ -n "$(ls ~/workspace/.ssh)" ]; then ssh-add ~/workspace/.ssh/*; fi' >> /home/docker/.bashrc &&\
     echo "echo 'Tip: use setup-workspace.sh to quickly install dependencies & build your workspace'" >> /home/docker/.bashrc
 
 # scripts
 
 # for using virtualgl / vglrun
-COPY base/vgl_entrypoint.sh /vgl_entrypoint.sh
+COPY base/entrypoint.sh /entrypoint.sh
 # for using vcstool, rosdep and colcon to setup the workspace
 COPY base/setup-workspace.sh /usr/local/bin/setup-workspace.sh
 
 
 ENV HOME=/home/docker
-WORKDIR /home/docker
+VOLUME /home/docker/workspace
+WORKDIR /home/docker/workspace
 USER docker
 
 
 # entrypoint with cloning and building workspace
 
-ENTRYPOINT ["/ros_entrypoint.sh", "/usr/local/bin/setup-workspace.sh"]
+ENTRYPOINT ["/entrypoint.sh", "/usr/local/bin/setup-workspace.sh"]
 CMD ["bash"]

@@ -18,6 +18,6 @@ COPY deploy/"$FILE_RUN" /usr/local/bin/deploy.sh
 
 # overwrite ENTRYPOINT with additional run-file
 
-ENTRYPOINT ["/ros_entrypoint.sh", "/usr/local/bin/setup-workspace.sh", "/usr/local/bin/deploy.sh"]
+ENTRYPOINT ["/entrypoint.sh", "/usr/local/bin/setup-workspace.sh", "/usr/local/bin/deploy.sh"]
 
 USER docker
