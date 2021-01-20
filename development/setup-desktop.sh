@@ -23,5 +23,4 @@ chown -R docker /opt/theia/plugins/vscode-cpp # https://github.com/microsoft/vsc
 # start Theia
 { cd /opt/theia; sudo -Eu docker yarn start /home/docker/workspace; } &
 
-
-exec sudo -Eu docker env VGL_DISPLAY=egl DISPLAY=$DISPLAY $vglrun startxfce4
+exec sudo -Eu docker env VGL_DISPLAY=egl DISPLAY=$DISPLAY $vglrun dbus-run-session jwm

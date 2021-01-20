@@ -30,23 +30,20 @@ RUN apt-get install -y --no-install-recommends \
 RUN ln -s /usr/share/novnc/vnc.html /usr/share/novnc/index.html &&\
     ln -s /usr/share/novnc/ /srv/novnc
 
+
 # xfce-desktop
 # TODO configs & background
 
 RUN apt-get install -y --no-install-recommends \
-      xfce4 thunar ristretto mousepad mpv \
-      xfce4-screenshooter \
-      xfce4-whiskermenu-plugin xfce4-cpugraph-plugin \
+      jwm thunar xfce4-terminal tumbler ristretto \
       pop-icon-theme
-
 
 # utilities
 
 RUN apt-get install -y --no-install-recommends \
       dbus-x11 gnome-keyring \
-      tilix epiphany-browser \
       wget psmisc \
-      vim-tiny feh \
+      vim-tiny \
       evince file-roller \
       htop fd-find silversearcher-ag
 
@@ -74,6 +71,9 @@ CMD ["/usr/local/bin/setup-desktop.sh"]
 
 # Setup User
 
+COPY development/wallpaper.jpg /usr/share/backgrounds/wallpaper.jpg
+COPY development/jwmrc /home/docker/.jwmrc
+COPY development/ssh/* /etc/ssh/ssh_config.d/
 
 # TODO xfce4-configs
 # COPY ...
