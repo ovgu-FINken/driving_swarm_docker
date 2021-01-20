@@ -1,6 +1,22 @@
 version: "3"
 services:
 
+  development_ssh:
+    image: "harbor.momar.xyz/driving_swarm/development_ssh"
+    build:
+      context: "."
+      dockerfile: "development_ssh.Dockerfile"
+
+    # To access your development environment, go to the following URL:
+    # http://localhost:1800/noVNC/?autoconnect=true&bell=false&view_clip=true&resize=scale&show_dot=true
+    ports: ["127.0.0.1:1800:1800", "127.0.0.1:1900:1900", "127.0.0.1:5900:5900"]
+    hostname: "ros-development-ssh"
+    volumes:
+    - "./workspace:/home/docker/workspace"
+
+    devices:
+    - "/dev/dri:/dev/dri"
+
   development:
     image: "ovgudrivingswarm/development:latest"
     build:

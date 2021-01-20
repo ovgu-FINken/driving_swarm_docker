@@ -12,7 +12,7 @@ sudo -Eu docker env VGL_DISPLAY=egl $vglrun Xvfb $DISPLAY -screen 0 1920x1080x16
 { sleep 2; sudo -Eu docker x11vnc -nopw -rfbport 5900 -ncache 0 -display $DISPLAY -shared -forever; } &
 
 # start NoVNC
-/opt/websockify/run --web="/srv/novnc/" 1800 localhost:5900 &
+websockify --web="/srv/novnc/" 1800 localhost:5900 &
 
 # fix own UID if workspace exists
 # this is only included with the development image as it's the only image intended to be ran with a mounted workspace

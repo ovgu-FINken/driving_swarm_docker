@@ -11,7 +11,7 @@ USER root
 
 RUN yes | unminimize &&\
     apt-get update &&\
-    apt-get install -y man-db
+    apt-get install -y --no-install-recommends man-db
 
 
 # Dev-Packages
@@ -23,36 +23,30 @@ RUN yes | unminimize &&\
 # VNC Server
 
 RUN apt-get install -y --no-install-recommends \
-      x11vnc xvfb x11-xserver-utils
-	  #novnc websockify
+      x11vnc xvfb x11-xserver-utils \
+	  novnc websockify
       # TODO work with nginx (theia!)
 
 # novnc + websockify
 
-RUN curl -fsSL https://github.com/novnc/noVNC/archive/v${NOVNC_VERSION}.tar.gz | tar -xzf - -C /opt &&\
-    curl -fsSL https://github.com/novnc/websockify/archive/v${WEBSOCKIFY_VERSION}.tar.gz | tar -xzf - -C /opt && \
-    mv /opt/noVNC-${NOVNC_VERSION} /opt/noVNC &&\
-    mkdir -p /srv/novnc &&\
-    mv /opt/websockify-${WEBSOCKIFY_VERSION} /opt/websockify &&\
-	ln -s /opt/noVNC/vnc.html /opt/noVNC/index.html &&\
-    ln -s /opt/noVNC /srv/novnc &&\
-    cd /opt/websockify && make
-
-
-# Cinnamon, without gnome-backgrounds dependency (which is a 50 MB download)
-#COPY development/gnome-backgrounds-equivs.deb /tmp/gnome-backgrounds.deb
-#RUN apt-get install -y --no-install-recommends /tmp/gnome-backgrounds.deb cinnamon adwaita-icon-theme-full feh
-#RUN rm /tmp/gnome-backgrounds.deb
-#COPY development/wallpaper.jpg /usr/share/backgrounds/wallpaper.jpg
-
+COPY development/nginx.conf /etc/nginx/conf.d/novnc.conf
+RUN ln -s /usr/share/novnc/vnc.html /usr/share/novnc/index.html &&\
+    ln -s /usr/share/novnc/ /srv/novnc
+    #curl -fsSL https://github.com/novnc/noVNC/archive/v${NOVNC_VERSION}.tar.gz | tar -xzf - -C /opt &&\
+    #curl -fsSL https://github.com/novnc/websockify/archive/v${WEBSOCKIFY_VERSION}.tar.gz | tar -xzf - -C /opt && \
+    #mv /opt/noVNC-${NOVNC_VERSION} /opt/noVNC &&\
+    #mkdir -p /srv/novnc &&\
+    #mv /opt/websockify-${WEBSOCKIFY_VERSION} /opt/websockify &&\
+    #ln -s /opt/noVNC/vnc.html /opt/noVNC/index.html &&\
+    #ln -s /opt/noVNC /srv/novnc &&\
+    #cd /opt/websockify && make
 
 # xfce-desktop
-# TODO configs
+# TODO configs & background
 
 RUN apt-get install -y --no-install-recommends \
       xfce4 thunar ristretto mousepad mpv \
       xfce4-screenshooter \
-      # TODO add config
       xfce4-whiskermenu-plugin xfce4-cpugraph-plugin \
       pop-icon-theme
 

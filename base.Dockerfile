@@ -10,9 +10,9 @@ ARG VIRTUALGL_VERSION=2.6.80
 # buildtools, introspection tools
 
 RUN apt-get update && apt-get -y upgrade &&\
-    apt-get -y --no-install-recommends install \
+    apt-get install -y --no-install-recommends \
       python3-pykdl
-RUN apt-get -y install \
+RUN apt-get install -y --no-install-recommends \
       gcc g++ \
       python3-pip \
       curl openssh-client \
