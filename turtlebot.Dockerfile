@@ -19,7 +19,7 @@ RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_relea
 
 
 RUN echo "export TURTLEBOT3_MODEL=burger" >> /home/docker/.rosrc &&\
-	echo "source /usr/share/gazebo/setup.sh" &&\
-    echo "export GAZEBO_MODEL_PATH=\"$GAZEBO_MODEL_PATH:$(find \"$PWD\" -name 'models' -type d -printf':%p')\"" >> /home/docker/.rosrc &&\
-    echo "export GAZEBO_RESOURCE_PATH="$GAZEBO_RESOURCE_PATH$(find \"$PWD\" -name 'worlds' -type d -printf':%p'\"" >> /home/docker/.rosrc
+	echo "source /usr/share/gazebo/setup.sh" >> /home/docker/.rosrc &&\
+    echo "export GAZEBO_MODEL_PATH=\"\$GAZEBO_MODEL_PATH:\$(find '$PWD' -name 'models' -type d -printf':%p')\"" >> /home/docker/.rosrc &&\
+    echo "export GAZEBO_RESOURCE_PATH=\"\$GAZEBO_RESOURCE_PATH\$(find '$PWD' -name 'worlds' -type d -printf':%p')\"" >> /home/docker/.rosrc
 USER docker

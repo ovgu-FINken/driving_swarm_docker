@@ -69,6 +69,7 @@ VOLUME /home/docker/.theia
 # Setup Script
 
 COPY development/setup-desktop.sh /usr/local/bin/setup-desktop.sh
+ENTRYPOINT []
 CMD ["/usr/local/bin/setup-desktop.sh"]
 
 

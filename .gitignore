@@ -1,6 +1,8 @@
 build-*
+
 deployspace/
 workspace/
+
 ssh/*.key
 ssh/*.pub
-ssh/id_rsa
+ssh/id_*
