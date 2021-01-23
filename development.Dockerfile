@@ -1,9 +1,8 @@
 FROM ovgudrivingswarm/turtlebot:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG ROS_VERSION=foxy
 ARG NODE_VERSION=12.x
-ARG NOVNC_VERSION=1.1.0
-ARG WEBSOCKIFY_VERSION=0.8.0
 
 USER root
 
@@ -18,7 +17,7 @@ RUN yes | unminimize &&\
 
 #RUN apt-get update &&\
 #    apt-get install -y --no-install-recommends\
-
+    
 
 # VNC Server
 # novnc + websockify
@@ -39,12 +38,12 @@ RUN apt-get install -y --no-install-recommends \
       xfce4-whiskermenu-plugin xfce4-cpugraph-plugin \
       pop-icon-theme
 
-
-# utilities
+# (ROS) utilities
 
 RUN apt-get install -y --no-install-recommends \
-      dbus-x11 gnome-keyring \
+      ros-$ROS_VERSION-rqt ros-$ROS_VERSION-rqt-common-plugins \
       tilix epiphany-browser \
+      dbus-x11 gnome-keyring \
       wget psmisc \
       vim-tiny feh \
       evince file-roller \

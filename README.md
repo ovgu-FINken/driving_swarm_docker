@@ -54,6 +54,7 @@ docker-compose up image
 
 - To access a shell in a running container, you can use `docker-compose exec image bash`.
 - You can also create a temporary container and run a command in it with `docker-compose run --rm image bash`
+- See [here](#quickstart) for how to access the development-environment from `development`
 
 ### Using make and manual builds
 
@@ -67,7 +68,7 @@ cd driving_swarm_docker
 docker-compose build image
 ```
 
-You can also just run `make image` to make the respective image.
+You can also just run `make build-image` to make the respective image.
 
 ## GPU Acceleration
 
