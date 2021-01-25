@@ -1,13 +1,13 @@
 #!/bin/sh
 
-rm -f /tmp/.X0-lock
+export DISPLAY=":100"
+rm -f /tmp/.X"$(echo $DISPLAY | cut -c2-)"-lock
 
 vglrun=vglrun
 if [ "$DISABLE_GPU" = "1" ]; then
 	vglrun=""
 fi
 
-export DISPLAY=":100"
 sudo -Eu docker env VGL_DISPLAY=egl $vglrun Xvfb $DISPLAY -screen 0 1920x1080x16 &
 { sleep 2; sudo -Eu docker x11vnc -nopw -rfbport 5900 -ncache 0 -display $DISPLAY -shared -forever; } &
 
