@@ -9,6 +9,10 @@ if ! compgen -G "*.repos" >/dev/null; then
   echo '    type: git' >> dependencies.repos
   echo '    url: https://github.com/ovgu-FINken/driving_swarm_infrastructure.git' >> dependencies.repos
   echo '    version: master' >> dependencies.repos
+  echo '  turtlebot3/turtlebot3_simulations:' >> dependencies.repos
+  echo '    type: git' >> dependencies.repos
+  echo '    url: https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git' >> dependencies.repos
+  echo '    version: ros2' >> dependencies.repos
 fi
 if ! [ -d .git ]; then
   git init

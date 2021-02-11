@@ -59,7 +59,8 @@ RUN curl -fsSLo /tmp/virtualgl.deb https://s3.amazonaws.com/virtualgl-pr/dev/lin
 # Add to .rosrc (ENTRYPOINT has no sourced files)
 
 RUN echo "#!/usr/bin/env bash\n# ROS-Specific initialisation of env-variables etc." >> /home/docker/.rosrc &&\
-    echo "\nsource /home/docker/workspace/install/setup.bash" >> /home/docker/.rosrc &&\
+    echo "\nsource /opt/ros/foxy/setup.bash" >> /home/docker/.rosrc &&\
+    echo "source /home/docker/workspace/install/setup.bash" >> /home/docker/.rosrc &&\
     echo "export ROS_DOMAIN_ID=42 #SWARMLAB" >> /home/docker/.rosrc
 
 
