@@ -1,0 +1,8 @@
+{
+    "python.linting.flake8Enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.autoComplete.extraPaths": [
+        "/home/docker/workspace/install/*/lib/*/site-packages",
+        "/opt/ros/*/lib/*/site-packages"
+    ]
+}
