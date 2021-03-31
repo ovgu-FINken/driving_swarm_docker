@@ -21,7 +21,7 @@ All you need is to install [docker](https://docs.docker.com/engine/install/).
 Then, just run the following command to start the development container with the directory `./workspace` mounted as `~/workspace`:
 
 ```bash
-docker run --name ros-development -d -h ros-development \
+docker run --name rosdev -d -h rosdev \
   --device=/dev/dri \
   -p 127.0.0.1:1800:1800 \
   -p 127.0.0.1:1900:1900 \
