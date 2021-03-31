@@ -24,8 +24,9 @@ if ! [ -f .gitignore ]; then
   echo '.ssh/' >> .gitignore
 fi
 
-cat *.repos | vcs import src
+cat *.repos | vcs import src || true
 sudo rosdep install -i --from-path src --rosdistro foxy -y
+for f in $(find src -maxdepth 2 -name .workspacerc); do source "$f"; done
 colcon build
 
 set +euo pipefail
