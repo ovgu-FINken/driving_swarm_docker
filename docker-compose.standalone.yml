@@ -1,0 +1,11 @@
+version: "3"
+services:
+  rosdev:
+    image: "ovgudrivingswarm/development:latest"
+    ports: ["127.0.0.1:1800:1800", "127.0.0.1:1900:1900", "127.0.0.1:5900:5900"]
+    hostname: "rosdev"
+    volumes:
+    - "./workspace:/home/docker/workspace"
+    - "./ssh:/home/docker/.ssh"
+    devices:
+    - "/dev/dri:/dev/dri"

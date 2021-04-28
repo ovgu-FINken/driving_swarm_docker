@@ -78,6 +78,7 @@ RUN echo "\ncd ~/workspace && source ~/.rosrc" >> /home/docker/.bashrc &&\
 COPY base/entrypoint.sh /entrypoint.sh
 # for using vcstool, rosdep and colcon to setup the workspace
 COPY base/setup-workspace.sh /usr/local/bin/setup-workspace.sh
+RUN ln -s setup-workspace.sh /usr/local/bin/sewo
 
 
 ENV HOME=/home/docker
