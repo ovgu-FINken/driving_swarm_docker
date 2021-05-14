@@ -17,8 +17,8 @@ RUN apt-get install -y --no-install-recommends \
       python3-pip \
       curl openssh-client \
       nano less &&\
-    ln -s /usr/bin/python3 /usr/bin/python &&\
-    ln -s /usr/bin/pip3 /usr/bin/pip
+    (ln -s /usr/bin/python3 /usr/bin/python || true) &&\
+    (ln -s /usr/bin/pip3 /usr/bin/pip || true)
 
 
 # add docker user
