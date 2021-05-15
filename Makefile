@@ -17,5 +17,8 @@ build-base: base.Dockerfile base/*
 	docker-compose build ${OPTIONS} base
 	@ touch $@
 
-.no-cache:
+clean:
+	rm -f build-base build-turtlebot build-turtlebot-slim build-development
+
+no-cache: clean
 	make build-development OPTIONS=--no-cache

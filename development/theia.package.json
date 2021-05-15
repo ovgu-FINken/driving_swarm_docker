@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@theia/cli": "next",
-    "webpack": "~4.46.0"
+    "webpack": "~5.37.0"
   },
   "scripts": {
     "prepare": "yarn run clean && yarn build && yarn run download:plugins",

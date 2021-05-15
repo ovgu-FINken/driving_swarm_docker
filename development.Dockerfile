@@ -71,11 +71,4 @@ COPY development/setup-desktop.sh /usr/local/bin/setup-desktop.sh
 ENTRYPOINT []
 CMD ["/usr/local/bin/setup-desktop.sh"]
 
-
-# Setup User
-
-
-# TODO xfce4-configs
-# COPY ...
-
 RUN chown -R docker /home/docker/

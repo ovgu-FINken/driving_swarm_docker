@@ -20,8 +20,8 @@ usermod -u "$(stat -c '%u' /home/docker/workspace || echo 1000)" docker
 chown -R docker /home/docker
 chown -R docker /opt/theia/plugins/vscode-cpp # https://github.com/microsoft/vscode-cpptools/issues/4643
 
-# start Theia
+# Start Theia
+{ sudo -Eu docker bash -c 'source ~/.rosrc && exec setup-workspace.sh'; } &
 { cd /opt/theia; sudo -Eu docker bash -c 'source ~/.rosrc && exec yarn start /home/docker/workspace'; } &
-
 
 exec sudo -Eu docker env VGL_DISPLAY=egl DISPLAY=$DISPLAY $vglrun startxfce4
