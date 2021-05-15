@@ -1,0 +1,8 @@
+{
+  "app_name": "driving-swarm-ide",
+  "icon_path_darwin": "resources/icon.icns",
+  "icon_path_linux": "resources/icon.png",
+  "icon_path_windows": "resources/icon.ico",
+  "version_astilectron": "0.47.0",
+  "version_electron": "12.0.5"
+}

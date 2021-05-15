@@ -1,0 +1,6 @@
+*.iml
+.idea/
+dependencies/
+bind_*
+windows.syso
+output/
